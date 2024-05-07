@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "871964228720",
+    "project_id": "melody-72ad2",
+    "storage_bucket": "melody-72ad2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871964228720:android:bc621c6bbaf6cae580c8b5",
+        "android_client_info": {
+          "package_name": "com.example.melody_project_mexique"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxLsG_Et0Zqrij9viO-xQzfYRiYGjuFBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

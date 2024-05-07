@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:melody_project_mexique/constantes.dart' as cons;
 
@@ -287,6 +289,13 @@ class _RegisterState extends State<Register> {
                         if (_formKey.currentState!.validate()) {
                           // Si le formulaire est valide, vérifiez si les emails correspondent
                           if (email.text == email2.text) {
+                            // Si les emails correspondent, ajout dans la base de données
+                            CollectionReference usersRef = FirebaseFirestore.instance.collection('Users');
+                           usersRef.add({
+                             'email': email.text,
+                             'password': password.text,
+                            });
+
                             // Si les emails correspondent, passez à la page de connexion
                             Navigator.of(context).push(
                               MaterialPageRoute(
