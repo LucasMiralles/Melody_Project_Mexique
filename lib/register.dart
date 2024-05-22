@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:melody_project_mexique/auth.dart';
 import 'package:melody_project_mexique/constantes.dart' as cons;
 
+import 'home.dart';
 import 'login.dart';
 
 class Register extends StatefulWidget {
@@ -18,6 +19,7 @@ class _RegisterState extends State<Register> {
   final email = TextEditingController();
   final email2 = TextEditingController();
   final password = TextEditingController();
+  bool passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +63,33 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  // Votre logique de connexion avec Facebook ici...
+                onPressed: () async {
+                  try {
+                    User? user = await AuthServices.signInWithFacebook(); // Modification de la variable ici
+                    if (user != null) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const Home(),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    print('Error al conectar con Facebook : $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Error al conectar con Facebook',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: cons.bleu,
@@ -82,8 +109,33 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  // Votre logique de connexion avec Google ici...
+                onPressed: () async {
+                  try {
+                    UserCredential userCredential = await AuthServices.signInWithGoogle();
+                    if (userCredential.user != null) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const Home(),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    print('Error al conectar con Google : $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Error al conectar con Google',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: cons.blanc,
@@ -253,9 +305,19 @@ class _RegisterState extends State<Register> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextFormField(
                         controller: password,
-                        obscureText: true,
+                        obscureText: !passwordVisible,
                         cursorColor: cons.noir,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: passwordVisible ?
+                            const Icon(Icons.visibility) :
+                            const Icon(Icons.visibility_off),
+                            onPressed: () {
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
                           hintText: 'Crear una contraseña.',
                           hintStyle: TextStyle(
                             color: Colors.black54,
@@ -284,24 +346,23 @@ class _RegisterState extends State<Register> {
                     ),
                     SizedBox(height: 15),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Vérifiez si le formulaire est valide
                         if (_formKey.currentState!.validate()) {
-                          // Si le formulaire est valide, vérifiez si les emails correspondent
+                          // Si les emails correspondent, tentez de vous inscrire
                           if (email.text == email2.text) {
-                            // Si les emails correspondent, ajout dans la base de données
-                            CollectionReference usersRef = FirebaseFirestore.instance.collection('Users');
-                           usersRef.add({
-                             'email': email.text,
-                             'password': password.text,
-                            });
+                            // Si les emails correspondent, inscrivez-vous
+                            _formKey.currentState!.save();
+                            bool isSignedUp = await AuthServices.signupUser(email.text, password.text, context);
 
-                            // Si les emails correspondent, passez à la page de connexion
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const Login(),
-                              ),
-                            );
+                            // Si l'inscription a réussi, naviguez vers la page d'accueil
+                            if (isSignedUp) {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const Home(),
+                                ),
+                              );
+                            }
                           } else {
                             // Sinon, affichez un message d'erreur
                             ScaffoldMessenger.of(context).showSnackBar(

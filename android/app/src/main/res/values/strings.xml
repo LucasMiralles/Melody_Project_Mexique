@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">melody</string>
+    <string name="facebook_app_id">962116432281807</string>
+    <string name="fb_login_protocol_scheme">fb962116432281807</string>
+    <string name="facebook_client_token">d864b10b479cc05cb6ee5b11b319a55e</string>
+</resources>

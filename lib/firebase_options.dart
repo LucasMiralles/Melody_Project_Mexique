@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '871964228720',
     projectId: 'melody-72ad2',
     storageBucket: 'melody-72ad2.appspot.com',
+    iosClientId: '871964228720-cf91qe6td9nh3763p1ro06gv70ou2eaq.apps.googleusercontent.com',
     iosBundleId: 'com.example.melodyProjectMexique',
   );
 
@@ -72,6 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '871964228720',
     projectId: 'melody-72ad2',
     storageBucket: 'melody-72ad2.appspot.com',
+    iosClientId: '871964228720-cf91qe6td9nh3763p1ro06gv70ou2eaq.apps.googleusercontent.com',
     iosBundleId: 'com.example.melodyProjectMexique',
   );
 
@@ -83,4 +85,5 @@ class DefaultFirebaseOptions {
     authDomain: 'melody-72ad2.firebaseapp.com',
     storageBucket: 'melody-72ad2.appspot.com',
   );
+
 }
