@@ -16,7 +16,7 @@ class AuthServices {
       await FirestoreServices.saveUser(email, userCredential.user!.uid);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registro con éxito', textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16)),
-          backgroundColor: Colors.black
+            backgroundColor: Colors.black
         ),
       );
       return true; // Inscription réussie
@@ -102,7 +102,7 @@ class AuthServices {
       return false; // Connexion échouée
     }
   }
- static Future<UserCredential> signInWithGoogle() async {
+  static Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -118,7 +118,7 @@ class AuthServices {
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
- static Future<User?> signInWithFacebook() async {
+  static Future<User?> signInWithFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
 
     if (result.status == LoginStatus.success) {
@@ -135,5 +135,42 @@ class AuthServices {
   static Future<void> signOutFacebook() async {
     await FacebookAuth.instance.logOut();
     await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> signOutGoogle() async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> signOutAll() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut(); // Déconnexion de Google
+    await FacebookAuth.instance.logOut(); // Déconnexion de Facebook
+  }
+
+  static Future<bool> isUserSignedInWithGoogle() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      // Vérifiez si l'utilisateur est connecté avec Google
+      for (final provider in currentUser.providerData) {
+        if (provider.providerId == GoogleAuthProvider.PROVIDER_ID) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> isUserSignedInWithFacebook() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      // Vérifiez si l'utilisateur est connecté avec Facebook
+      for (final provider in currentUser.providerData) {
+        if (provider.providerId == FacebookAuthProvider.PROVIDER_ID) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

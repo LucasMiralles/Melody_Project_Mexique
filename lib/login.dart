@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:melody_project_mexique/constantes.dart' as cons;
 import 'package:melody_project_mexique/home.dart';
+import 'package:melody_project_mexique/Screens/ArtistsPage.dart';
 import 'auth.dart';
 import 'register.dart';
 
@@ -67,7 +68,7 @@ class _LoginState extends State<Login> {
                       if (user != null) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const Home(),
+                            builder: (context) => ArtistsPage(),
                           ),
                         );
                       }
@@ -113,7 +114,7 @@ class _LoginState extends State<Login> {
                   if (userCredential.user != null) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const Home(),
+                        builder: (context) => ArtistsPage(),
                       ),
                     );
                   }
@@ -306,7 +307,7 @@ class _LoginState extends State<Login> {
                           if (isLoggedIn) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => const Home(),
+                                builder: (context) => ArtistsPage(),
                               ),
                             );
                           }

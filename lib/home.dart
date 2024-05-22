@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:melody_project_mexique/auth.dart';
 import 'package:melody_project_mexique/login.dart';
 
 class Home extends StatefulWidget {
@@ -33,15 +32,21 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut(); // Déconnexion de Google
-    await FacebookAuth.instance.logOut(); // Déconnexion de Facebook
+    if (await AuthServices.isUserSignedInWithGoogle()) {
+      await AuthServices.signOutGoogle(); // Déconnexion de Google
+    } else if (await AuthServices.isUserSignedInWithFacebook()) {
+      await AuthServices.signOutFacebook(); // Déconnexion de Facebook
+    } else {
+      await AuthServices.signOutAll(); // Déconnexion de toutes les plateformes
+    }
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => Login(),
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
